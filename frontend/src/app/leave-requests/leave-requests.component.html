@@ -1,8 +1,71 @@
-<h2>Leave Requests</h2>
+<h2>Leave Requests Management</h2>
 
-<!-- TODO (candidate): add the "new request" form here, with validation. -->
+<div class="form-container">
+  <h3>New Leave Request</h3>
+  
+  <form [formGroup]="requestForm" (ngSubmit)="createRequest()">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="employeeSelect">Employee *</label>
+        <select id="employeeSelect" formControlName="employeeId">
+          <option value="" disabled selected>Select Employee</option>
+          <option *ngFor="let emp of employees" [value]="emp.id">{{ emp.name }} (Quota: {{ emp.annualQuota }}d)</option>
+        </select>
+        <span class="error-msg" *ngIf="requestForm.get('employeeId')?.touched && requestForm.get('employeeId')?.errors?.['required']">
+          Employee selection is required.
+        </span>
+      </div>
 
-<div *ngIf="loading">Loading...</div>
+      <div class="form-group">
+        <label for="typeSelect">Leave Type *</label>
+        <select id="typeSelect" formControlName="type">
+          <option [value]="0">Vacation</option>
+          <option [value]="1">Sick</option>
+          <option [value]="2">Unpaid</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="startDate">Start Date *</label>
+        <input type="date" id="startDate" formControlName="startDate" />
+        <span class="error-msg" *ngIf="requestForm.get('startDate')?.touched && requestForm.get('startDate')?.errors?.['required']">
+          Start date is required.
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="endDate">End Date *</label>
+        <input type="date" id="endDate" formControlName="endDate" />
+        <span class="error-msg" *ngIf="requestForm.get('endDate')?.touched && requestForm.get('endDate')?.errors?.['required']">
+          End date is required.
+        </span>
+      </div>
+    </div>
+
+    <!-- Date range error -->
+    <div class="error-banner" *ngIf="requestForm.touched && requestForm.errors?.['invalidDateRange']">
+      ⚠️ Start date cannot be later than end date!
+    </div>
+
+    <!-- Submission feedback message -->
+    <div *ngIf="formMessage" [class]="'msg-banner ' + formMessage.type">
+      {{ formMessage.text }}
+    </div>
+
+    <button type="submit" [disabled]="submitting">
+      {{ submitting ? 'Submitting...' : 'Submit Request' }}
+    </button>
+  </form>
+</div>
+
+<hr />
+
+<!-- Point 5 Table Banners -->
+<div *ngIf="tableMessage" [class]="'msg-banner ' + tableMessage.type">
+  {{ tableMessage.text }}
+</div>
+
+<div *ngIf="loading">Loading requests...</div>
 
 <table *ngIf="!loading">
   <thead>
@@ -14,7 +77,7 @@
       <th>End</th>
       <th>Days</th>
       <th>Status</th>
-      <th></th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -25,9 +88,19 @@
       <td>{{ r.startDate | date: 'dd/MM/yyyy' }}</td>
       <td>{{ r.endDate | date: 'dd/MM/yyyy' }}</td>
       <td>{{ r.days }}</td>
-      <td>{{ statusLabel(r.status) }}</td>
       <td>
-        <button *ngIf="r.status == 0" (click)="approve(r.id)">Approve</button>
+        <span [class]="'status-badge status-' + r.status">
+          {{ statusLabel(r.status) }}
+        </span>
+      </td>
+      <td>
+        <button 
+          *ngIf="r.status === 0" 
+          [disabled]="isApproving(r.id)"
+          (click)="approve(r.id)"
+          class="btn-approve">
+          {{ isApproving(r.id) ? 'Approving...' : 'Approve' }}
+        </button>
       </td>
     </tr>
   </tbody>
