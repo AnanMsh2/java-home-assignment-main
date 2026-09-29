@@ -68,13 +68,14 @@ LeaveRequestsController צומצם לטיפול ב-HTTP והעברת הפעול�
 
 ### איפה AI עזר (כולל prompts)
 
-1. prompt: "..." → מה קיבלתי ומה עשיתי איתו:
-2. השתמשתי בAI בשביל לבדוק את עצמי אחרי כל סעיף ובעיקר בשלב של השינויים הארכיטקטונים, החלטתי שכדי לחסוך זמן אני אסביר לו את השינויים הארכיטקטונים שאני רוצה לבצע (וגם התיקון של הSQL INJECTION) ושהוא יבצע את זה, אחרכך עברתי על מה שהוא עשה כדי לוודא שהוא אכן ביצע את זה נכון ואיך שאני רציתי ותיארתי, לדוגמא ווידאתי שהLEAVE REQUEST SERVICE אכן מכיל תחתיו רק את האחריות שרציתי שיקח, ו שהREFACTOR לCONTROLLER לא פגע בשום יכולת ושזה רק רידד אותו כדי שבאמת יקח עליו את האחריות שצריכה להיות לREST CONTROLLER ושהוא מעביר את העבודה בצורה נכונה לSERVICE.
+1. **prompt:** `"Extract business logic into LeaveRequestService with @Transactional, make LeaveRequestsController thin, and fix SQL injection in search using parameterized JPQL."`
+   → **מה קיבלתי ומה עשיתי איתו:** השתמשתי בAI בשביל לבדוק את עצמי אחרי כל סעיף ובעיקר בשלב של השינויים הארכיטקטונים, החלטתי שכדי לחסוך זמן אני אסביר לו את השינויים הארכיטקטונים שאני רוצה לבצע (וגם התיקון של הSQL INJECTION) ושהוא יבצע את זה, אחרכך עברתי על מה שהוא עשה כדי לוודא שהוא אכן ביצע את זה נכון ואיך שאני רציתי ותיארתי, לדוגמא ווידאתי שהLEAVE REQUEST SERVICE אכן מכיל תחתיו רק את האחריות שרציתי שיקח, ו שהREFACTOR לCONTROLLER לא פגע בשום יכולת ושזה רק רידד אותו כדי שבאמת יקח עליו את האחריות שצריכה להיות לREST CONTROLLER ושהוא מעביר את העבודה בצורה נכונה לSERVICE.
 
-השתמשתי גם הAI כדי לעזור לי להרריץ לוקאלית כי עבדתי במחשב שהיו לו הרבה הגנות נגד וורטואליזציה ולא הצלחתי להרים את זה בדוקר, אז בסוף נעזרתי בו כדי להכניס את הH2 IMDB בתוך הPOM ו APPLICATION.YML
-4.השתמשתי בAI  בחלק של הFRONT כדי ליצור את הREACTIVE FORMS
-כמובן שתוך כדי בקרה שלי וכתיבת הקוד באופן עצמאי (עם עזרה שלו כמובן)
-נעזרתי בו בחלקים של הHTML וCSS
+2. **prompt:** `"Add temporary H2 in-memory DB configuration to pom.xml and application.yml to run locally without Docker."`
+   → **מה קיבלתי ומה עשיתי איתו:** השתמשתי גם הAI כדי לעזור לי להרריץ לוקאלית כי עבדתי במחשב שהיו לו הרבה הגנות נגד וורטואליזציה ולא הצלחתי להרים את זה בדוקר, אז בסוף נעזרתי בו כדי להכניס את הH2 IMDB בתוך הPOM ו APPLICATION.YML.
+
+3. **prompt:** `"Generate Angular ReactiveForm for leave request creation with date validation and inline error template."`
+   → **מה קיבלתי ומה עשיתי איתו:** השתמשתי בAI בחלק של הFRONT כדי ליצור את הREACTIVE FORMS כמובן שתוך כדי בקרה שלי וכתיבת הקוד באופן עצמאי (עם עזרה שלו כמובן) נעזרתי בו בחלקים של הHTML וCSS.
 
 
 
