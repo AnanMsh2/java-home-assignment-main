@@ -28,7 +28,7 @@ public class LeaveRequestsController {
     private EntityManager entityManager;
 
     public LeaveRequestsController(EmployeeRepository employeeRepository,
-                                   LeaveRequestRepository leaveRequestRepository) {
+            LeaveRequestRepository leaveRequestRepository) {
         this.employeeRepository = employeeRepository;
         this.leaveRequestRepository = leaveRequestRepository;
     }
@@ -76,7 +76,7 @@ public class LeaveRequestsController {
                 .sum();
 
         // Make sure the request does not exceed the quota.
-        if (dto.getType() == LeaveType.VACATION && days > employee.getAnnualQuota()) {
+        if (dto.getType() == LeaveType.VACATION && (used + days) > employee.getAnnualQuota()) {
             return ResponseEntity.badRequest().body("Not enough vacation balance");
         }
 
