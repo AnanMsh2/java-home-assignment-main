@@ -52,7 +52,7 @@ public class LeaveRequestService {
                 .mapToInt(LeaveRequest::getDays)
                 .sum();
 
-        if (dto.getType() == LeaveType.VACATION && (used + days) > employee.getAnnualQuota()) {
+        if ((dto.getType() == null || dto.getType() == LeaveType.VACATION) && (used + days) > employee.getAnnualQuota()) {
             return ResponseEntity.badRequest().body("Not enough vacation balance");
         }
 
