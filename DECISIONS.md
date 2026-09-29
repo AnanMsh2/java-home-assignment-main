@@ -64,6 +64,14 @@ LeaveRequestsController צומצם לטיפול ב-HTTP והעברת הפעול�
 ולא 15
 השינוי הוא קל אבל לא רציתי להשקיע בזה זמן במסגרת המבחן.
 
+
+ **ניהול שגיאות מרכזי ב-Backend (`@ControllerAdvice`):**
+   במקום להחזיר תגובות שגיאה ידניות מה-Controller או מברירות מחדל, הייתי מממש `GlobalExceptionHandler` מבוסס `@ControllerAdvice` שממיר Domain Exceptions (כגון `QuotaExceededException` או `ResourceNotFoundException`) לפורמט שגיאה סטנדרטי (RFC 7807 Problem Details).
+
+ובSCALE יותר גבוה הייתי שוקל להוסיף PAGINATION 
+בFRONTEND כדי לטעון בקשות בחלוקה לעמודים
+(רק במקרה ויש צורך לתמוך באלפי בקשות)
+
 ## 5\. שימוש ב‑AI
 
 ### איפה AI עזר (כולל prompts)
