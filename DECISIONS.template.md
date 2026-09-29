@@ -35,6 +35,40 @@
 
 חלופה אפשרית היא Optimistic Locking באמצעות `@Version`.
 
+
+
+## 7\. הסבר שינויים ארכיטקטונים
+
+1\. הפרדת שכבת Service
+
+
+
+נוצר LeaveRequestService.java כדי להעביר מה-Controller את הלוגיקה העסקית, הגישה למסד הנתונים, בדיקות המכסה וניהול הסטטוסים.
+
+
+
+נוסף @Transactional(readOnly = true) ברמת המחלקה, ו-@Transactional לפעולות הכתיבה create() ו-approve().
+
+
+
+2\. תיקון אבטחה – SQL Injection
+
+
+
+הוסר SQL שנבנה באמצעות שרשור קלט מהמשתמש.
+
+
+
+במקומו נוספה שאילתת JPQL עם פרמטרים ב-LeaveRequestRepository, כדי למנוע SQL Injection.
+
+
+
+3\. ניקוי ה-Controller
+
+
+
+LeaveRequestsController צומצם לטיפול ב-HTTP והעברת הפעולות ל-LeaveRequestService, ללא לוגיקה עסקית או גישה ישירה למסד הנתונים.
+
 ## 4\. על מה ויתרתי בגלל הזמן
 
 * ... ומה הייתי עושה עם עוד יום:
