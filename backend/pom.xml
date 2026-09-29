@@ -40,6 +40,13 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- H2 database (temporary local testing without Docker) -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
         <!-- Swagger / OpenAPI UI at /swagger-ui.html -->
         <dependency>
             <groupId>org.springdoc</groupId>
