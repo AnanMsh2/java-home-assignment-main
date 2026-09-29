@@ -92,4 +92,45 @@ public class LeaveRequestsController {
 
         return ResponseEntity.ok(request);
     }
+
+    // POST /api/leave-requests/{id}/approve
+    @PostMapping("/{id}/approve")
+    @org.springframework.transaction.annotation.Transactional
+    public ResponseEntity<?> approve(@PathVariable Long id) {
+        // 1. Find request
+        LeaveRequest request = leaveRequestRepository.findById(id).orElse(null);
+        if (request == null) {
+            return ResponseEntity.status(404).body("Leave request not found");
+        }
+
+        // 2. Validate current status
+        if (request.getStatus() != LeaveStatus.PENDING) {
+            return ResponseEntity.badRequest().body("Request is already " + request.getStatus());
+        }
+
+        // 3. Find employee & re-check quota for VACATION
+        if (request.getType() == LeaveType.VACATION) {
+            Employee employee = employeeRepository.findById(request.getEmployeeId()).orElse(null);
+            if (employee == null) {
+                return ResponseEntity.status(404).body("Employee not found");
+            }
+
+            int usedDays = leaveRequestRepository
+                    .findByEmployeeIdAndTypeAndStatus(employee.getId(), LeaveType.VACATION, LeaveStatus.APPROVED)
+                    .stream()
+                    .mapToInt(LeaveRequest::getDays)
+                    .sum();
+
+            if ((usedDays + request.getDays()) > employee.getAnnualQuota()) {
+                return ResponseEntity.badRequest().body("Approving this request exceeds annual quota");
+            }
+        }
+
+        // 4. Set status and save
+        request.setStatus(LeaveStatus.APPROVED);
+        leaveRequestRepository.save(request);
+
+        return ResponseEntity.ok(request);
+    }
+
 }
